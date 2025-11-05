@@ -1,22 +1,26 @@
 import os
+from tools import show_menu, opciones
+
 #Funcion del MAIN
 def main():
     continuar = True
     while continuar:
         os.system("cls")
-        menu()
-        opcion = opciones("Elije opcion(1-5):")         
+        show_menu()
+        opcion = opciones("Elije una opcion(1-6):")         
         match opcion:
             case 1:
-                show_productos()
+                pass
             case 2:
-                add_album()
+                pass
             case 3:
-                del_carrito()
+                pass
             case 4:
-                total_compra()
+                pass
             case 5:
-                mensaje_salida()
+                pass
+            case 6:
+                pass
                 continuar = False  
             case _:
                 print("Esa opción no está disponible")
