@@ -7,7 +7,7 @@ def main():
     while continuar:
         os.system("cls")
         show_menu()
-        opcion = opciones("Elije una opcion(1-6):")         
+        opcion = opciones("Elije una opcion(1-7):")         
         match opcion:
             case 1:
                 pass
@@ -21,7 +21,9 @@ def main():
                 pass
             case 6:
                 pass
-                continuar = False  
+            case 7:
+                 pass
+                 continuar = False  
             case _:
                 print("Esa opción no está disponible")
      

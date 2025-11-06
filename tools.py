@@ -17,7 +17,8 @@ def show_menu():
     3️⃣  Prestar libro
     4️⃣  Devolver libro
     5️⃣  Buscar libro
-    6️⃣  Salir del programa
+    6️⃣  Mostrar historial
+    7️⃣  Salir del programa
           """)   
     
 #OPCIONES del menú     

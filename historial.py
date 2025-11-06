@@ -57,7 +57,7 @@ def show_history() -> None:
     Función para enseñar el historial de la biblioteca.
     """
     # Obtener historial de libros.
-    libros = get_books()
+    libros = get_history()
 
     # Validar si no hay libros.
     if not libros:
