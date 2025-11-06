@@ -40,6 +40,7 @@ def main():
                  continuar = False  
             case _:
                 print("Esa opción no está disponible")
+                print("")
         input('Pulse cualquier tecla para continuar...')
      
 if __name__ == "__main__":
