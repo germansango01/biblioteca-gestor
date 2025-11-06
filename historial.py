@@ -15,8 +15,18 @@ HISTORY_PATH = Path("biblioteca-gestor") / "history.json"
 history = None
 
 #CREAR LOAD_HISTORY() - ✔
-#CREAR GET_HISTORY
-#CREAR SHOW_HISTORY
+#CREAR GET_HISTORY() - ✔
+#CREAR SHOW_HISTORY() - ✔
+
+def get_current_time():
+    """
+    Obtener la fecha y hora actual.
+
+    Return:
+        str: Cadena de texto con la fecha y hora actual.
+    """
+    # fecha actual.
+    return datetime.datetime.now().isoformat()
 
 def load_history():
     """
@@ -28,11 +38,15 @@ def load_history():
     #VALIDACIÓN DE LA RUTA DEL HISTORIAL
     HISTORY_PATH.parent.mkdir(exist_ok=True) 
     
+    #CREAR ARCHIVO SI NO EXISTE
+    if not HISTORY_PATH.exists():
+        return []
+    
     #Cargar historial desde JSON.
     try:
         with HISTORY_PATH.open("r", encoding="utf-8") as f:
             data = json.load(f)
-            return data
+            return data if isinstance(data, list) else []
     except (json.JSONDecodeError, OSError):
         print(f"\n❌ Error: El archivo '{HISTORY_PATH}' contiene JSON mal formado y no se pudo cargar.")
         return []
@@ -68,11 +82,47 @@ def show_history() -> None:
 
     # Mostrar historial.
     print("\n" + "=" * 50)
-    print(f"{' ' * 10}Productos Disponibles")
+    print(f"{' ' * 10}Libros Disponibles")
     print("=" * 50)
-    print(f"{'Id':<5} {'Producto':<25} {'Precio':<10} {'Stock':<10}")
+    print(f"{'Id':<5} {'Titulo':<25} {'Autor':<10} {'Año':<10}")
     print("-" * 50)
     for libro in libros:
         if libro['stock'] > 0:
             print(f"{libro['id']:<5} {libro['status']:<25} €{libro['title']:<10.2f} {libro['autor']:<10} {libro['year']:<10} {libro['fecha']:<10}")
     print("-" * 50)
+
+
+def log_history(book_data):
+    """
+    Registrar una nueva entrada en el historial cuando se saca o devuelve un libro.
+    
+    """
+    try:
+        # Cargar historial existente.
+        history = load_history()
+
+        # Añadir la nueva compra.
+        history.append(book_data)
+
+        # Guardar el historial actualizado.
+        save_libros(history)
+        return True
+    except Exception as e:
+        print(f"❌ Error al registrar la compra en el historial: {e}")
+        return False
+
+def save_libros(books):
+    """
+    Guarda la lista completa del historial de prestamos y devoluciones
+    
+    """
+    #VALIDACIÓN RUTA
+    HISTORY_PATH.parent.mkdir(exist_ok=True)
+
+    #Guardar movimientos en el JSON.
+    try:
+        with HISTORY_PATH.open("w", encoding="utf-8") as f:
+            # Uso la variable 'books' que es más estándar.
+            json.dump(books, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"❌ Error al guardar compras en '{HISTORY_PATH}': {type(e).__name__} - {e}")
