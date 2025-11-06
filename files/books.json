@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "title": "sfsdf",
+        "author": "sdfsdf",
+        "year": 1111,
+        "available": false
+    },
+    {
+        "id": 2,
+        "title": "german",
+        "author": "sfsdf",
+        "year": 2222,
+        "available": true
+    }
+]

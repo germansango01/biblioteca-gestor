@@ -28,7 +28,7 @@ class Book:
         if not self.BOOKS_PATH.exists():
             return []
 
-        # Cargar compras desde JSON.
+        # Cargar libros desde JSON.
         try:
             with self.BOOKS_PATH.open("r", encoding="utf-8") as f:
                 data = json.load(f)
@@ -67,7 +67,7 @@ class Book:
 
     def find_book(self, book_id):
             """
-            Buscar un libro por id dentro de la lista de libros.
+            Buscar un libro por id.
 
             Args:
                 book_id (int): ID del libro a buscar.
@@ -83,20 +83,61 @@ class Book:
             for book in self._books:
                 if book.get("id") == book_id:
                     return book
-
             return None
 
 
-    def lend_book(self, book_id, qty):
+    def find_book_title(self, book_title):
+            """
+            Buscar un libro por title dentro de la lista de libros.
+
+            Args:
+                book_title (str): Title del libro a buscar.
+
+            Return:
+                dict or None: El diccionario del libro o None si no se encuentra.
+            """
+            # Validar libros.
+            if not self._books:
+                return None
+
+            # Buscar libro por Title.
+            for book in self._books:
+                if book.get("title") == book_title:
+                    return book
+            return None
+
+
+    def add_book(self, book_data):
+            """
+            Guardar un nuevo libro en la biblioteca.
+
+            Args:
+                book_data (dict): Un diccionario con los datos de la libro a registrar.
+
+            Return:
+                bool: True si el registro fue exitoso, False si falló.
+            """
+            try:
+                # Añadir libro nuevo a biblioteca.
+                self._books.append(book_data)
+
+                # Guardar libro a la biblioteca.
+                self._save_books()
+                return True
+            except Exception as e:
+                print(f"❌ Error al registrar el libro: {e}")
+                return False
+
+
+    def lend_book(self, book_id):
         """
         Prestar el libro.
 
         Args:
-            book_id (int): ID del libro cuyo stock se debe reducir.
-            qty (int): Cantidad a reducir.
+            book_id (int): ID del libro a prestar.
 
         Return:
-            bool: True si el stock se redujo con éxito, False en caso contrario.
+            bool: True si se prestó el libro con éxito, False en caso contrario.
         """
         # Buscar libro por ID.
         book = self.find_book(book_id)
@@ -105,32 +146,34 @@ class Book:
         if not book:
             return False
 
-        # Validar stock.
-        if book.get("stock", 0) >= qty:
-            book["stock"] = book.get("stock", 0) - qty
-            return True
-        # Stock insuficiente.
-        return False
+        # Validar estado actual.
+        if book.get("available") is False:
+            return False
+
+        book["available"] = False
+        return True
 
 
-    def return_book(self, book_id, qty):
+    def return_book(self, book_id):
         """
         Devolver el libro.
 
         Args:
-            book_id (int): ID del libro cuyo stock se debe aumentar.
-            qty (int): Cantidad a aumentar.
+            book_id (int): ID del libro a devolver.
 
         Return:
-            bool: True si el stock se aumentó con éxito, False en caso contrario
+            bool: True si se devolvio el libro con éxito, False en caso contrario
         """
         # Buscar libro por ID.
         book = self.find_book(book_id)
 
-        # Validar libro y cantidad.
-        if not book or qty <= 0:
+        # Validar libro existe.
+        if not book:
             return False
 
-        # Aumentar stock.
-        book["stock"] = book.get("stock", 0) + qty
+        # Validar estado actual.
+        if book.get("available") is True:
+            return False
+
+        book["available"] = True
         return True
