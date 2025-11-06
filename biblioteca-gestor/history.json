@@ -30,5 +30,21 @@
         "year": 1987,
         "status": "Lend",
         "created_at": "2025-11-06"
+    },
+    {
+        "id": 1,
+        "title": "German",
+        "author": "Contreras",
+        "year": 1987,
+        "status": "Lend",
+        "created_at": "2025-11-06"
+    },
+    {
+        "id": 1,
+        "title": "German",
+        "author": "Contreras",
+        "year": 1987,
+        "status": "Lend",
+        "created_at": "2025-11-06"
     }
 ]

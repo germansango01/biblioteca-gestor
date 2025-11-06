@@ -1,5 +1,5 @@
 import os
-from tools import show_menu, opciones
+from tools import show_menu, opciones, despedida
 from historial import show_history, log_history
 
 book1 = {
@@ -36,10 +36,11 @@ def main():
             case 6:
                 show_history()
             case 7:
-                 pass
+                 despedida()
                  continuar = False  
             case _:
                 print("Esa opción no está disponible")
+        input('Pulse cualquier tecla para continuar...')
      
 if __name__ == "__main__":
         main()

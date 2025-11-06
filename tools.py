@@ -11,14 +11,14 @@ def show_menu():
     """
     print(""" 
     Gestor de biblioteca 📚
-        -------
-    1️⃣  Libros disponibles
-    2️⃣  Añadir libro
-    3️⃣  Prestar libro
-    4️⃣  Devolver libro
-    5️⃣  Buscar libro
-    6️⃣  Mostrar historial
-    7️⃣  Salir del programa
+        --------------
+    1️⃣.  Libros disponibles
+    2️⃣.  Añadir libro
+    3️⃣.  Prestar libro
+    4️⃣.  Devolver libro
+    5️⃣.  Buscar libro
+    6️⃣.  Mostrar historial
+    7️⃣.  Salir del programa
           """)   
     
 #OPCIONES del menú     
@@ -34,3 +34,5 @@ def opciones(mensaje):
         except ValueError:
             return print("¡Error ❌! Solo números")
             
+def despedida():
+    print(f"Gracias por usar nuestro gestor 📖")

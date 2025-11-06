@@ -84,10 +84,10 @@ def show_history() -> None:
     print("\n" + "=" * 50)
     print(f"{' ' * 10}Libros Disponibles")
     print("=" * 50)
-    print(f"{'Id':<5} {'Titulo':<25} {'Autor':<10} {'Año':<10}")
+    print(f"{'Id':<3} {'Estado':<10} {'Titulo':<15} {'Autor':<10} {'Año':<10} {'Fecha':<10}")
     print("-" * 50)
     for libro in libros:
-            print(f"{libro['id']:<5} {libro['status']:<25} €{libro['title']:<10} {libro['author']:<10} {libro['year']:<10} {libro['created_at']:<10}")
+            print(f"{libro['id']:<3} {libro['status']:<10} {libro['title']:<15} {libro['author']:<10} {libro['year']:<10} {libro['created_at']:<10}")
     print("-" * 50)
 
 ######################
