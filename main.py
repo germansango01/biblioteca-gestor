@@ -1,5 +1,19 @@
 import os
 from tools import show_menu, opciones
+from historial import show_history, log_history
+
+book1 = {
+        "id": 1,
+        "title": "German",
+        "author": "Contreras",
+        "year": 1987,
+        "status": "Lend",
+       "created_at": "2025-11-06"
+    }
+
+
+cargar = log_history(book1)
+
 
 #Funcion del MAIN
 def main():
@@ -20,7 +34,7 @@ def main():
             case 5:
                 pass
             case 6:
-                pass
+                show_history()
             case 7:
                  pass
                  continuar = False  

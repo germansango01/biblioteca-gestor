@@ -87,11 +87,10 @@ def show_history() -> None:
     print(f"{'Id':<5} {'Titulo':<25} {'Autor':<10} {'Año':<10}")
     print("-" * 50)
     for libro in libros:
-        if libro['stock'] > 0:
-            print(f"{libro['id']:<5} {libro['status']:<25} €{libro['title']:<10.2f} {libro['autor']:<10} {libro['year']:<10} {libro['fecha']:<10}")
+            print(f"{libro['id']:<5} {libro['status']:<25} €{libro['title']:<10} {libro['author']:<10} {libro['year']:<10} {libro['created_at']:<10}")
     print("-" * 50)
 
-
+######################
 def log_history(book_data):
     """
     Registrar una nueva entrada en el historial cuando se saca o devuelve un libro.
@@ -108,7 +107,7 @@ def log_history(book_data):
         save_libros(history)
         return True
     except Exception as e:
-        print(f"❌ Error al registrar la compra en el historial: {e}")
+        print(f"❌ Error al registrar el libro en el historial: {e}")
         return False
 
 def save_libros(books):
