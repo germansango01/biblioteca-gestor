@@ -1,9 +1,23 @@
 import os
 from tools import show_menu, opciones, despedida
+from books import Book
+from book_manager import BookManager
 from historial import History
 
-new_historial = History()
 
+#Funcion del MAIN
+def main():
+
+    try:
+        books = Book()
+        book_manager = BookManager(books)
+        new_historial = History()
+    except Exception as e:
+        print(f"\n❌ Error fatal al inicializar el sistema: {e}")
+        print("Asegúrate de que las clases Product, Purchase, Cart y utils existen.")
+        return
+
+      
 #Funcion del MAIN
 def main():
     continuar = True
@@ -13,15 +27,15 @@ def main():
         opcion = opciones("Elije una opción (1-7): ")
         match opcion:
             case 1:
-                pass
+                book_manager.show_books_list()
             case 2:
-                pass
+                book_manager.add_book_to_library()
             case 3:
-                pass
+                book_manager.lend_book_from_library()
             case 4:
-                pass
+                book_manager.restore_book_to_library()
             case 5:
-                pass
+                book_manager.find_book_from_library()
             case 6:
                 new_historial.show_history()
             case 7:
