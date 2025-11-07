@@ -1,6 +1,7 @@
 import os
 from tools import show_menu, opciones, despedida
-from historial import show_history, log_history
+import historial
+
 
 book1 = {
         "id": 1,
@@ -12,7 +13,7 @@ book1 = {
     }
 
 
-cargar = log_history(book1)
+cargar = historial.Loader(book1)
 
 
 #Funcion del MAIN
@@ -34,7 +35,7 @@ def main():
             case 5:
                 pass
             case 6:
-                show_history()
+                historial.show
             case 7:
                  despedida()
                  continuar = False  
