@@ -17,9 +17,6 @@ def main():
         print("Asegúrate de que las clases Product, Purchase, Cart y utils existen.")
         return
 
-      
-#Funcion del MAIN
-def main():
     continuar = True
     while continuar:
         os.system("cls")
