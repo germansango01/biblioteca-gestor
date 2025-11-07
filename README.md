@@ -1,27 +1,50 @@
-Projecte Gestió de Biblioteca amb control de versions
-Manel Plaza
-•
-7:41 p.m.
-10 puntos
-🎯 Objetivo general
 
-Crear un sistema de gestión de biblioteca que permita agregar libros, prestar y devolver libros, buscar por autor y guardar la información en un archivo JSON.
+# PAC-1. Projecte Gestió de Biblioteca amb control de versions
 
-El proyecto debe aplicarse en Python utilizando POO avanzada y programación modular, además de practicar colaboración con GitHub.
+**Participantes:**
 
-🗂 Estructura del proyecto
+- Germán Contreras
+- Mary Ramos (Nzinga Mbande)
 
-biblioteca/
-│
-├─ modelo.py # Clases, métodos, lógica y JSON
-├─ menu.py # Menú interactivo con usuario
-└─ catalogo.json # Archivo donde se guarda la información (creado por el programa)
+Proyecto para crear un sitema de gestión para una biblioteca. El programa permite las funciones de agregar, prestar y devolver libros. Además guarda historial de los movimientos de la biblioteca en un historial, que en este caso es un archivo JSON.
 
-👥 Trabajo en parejas
+**Distribución:**
 
-Cada pareja se organizará de la forma que crea más conveniente distribuyendo el trabajo de forma equitativa. Ambos deben coordinarse mediante commits frecuentes y uso de ramas.
+Germán Contreras se encargó de crear los módulos.py para le gestión de los libros, lo que incluye "book_manager.py" y "books.py". En ellos están los métodos necesarios para prestar, devolver y ver el archivo de la biblioteca.
 
-🗂 Entrega
-Carpeta comprimida ZIP con el total de archivos del proyecto (Alumno1_Alumno2_PAC1.zip). La carpeta debe incluir un archivo README.md con la información relevante del proyecto: participantes, distribución del trabajo, uso de la IA generativa (motor, promps y resultados), módulos de Python usados, etc.
-Además de la carpeta comprimida, incluir la URL del repositorio de GitHub
-RECORDATORIO IMPORTANTE: comentar el código por bloques.
+Mary Ramos fue responsable de crear los módulos "historial.py", "tools.py" y "main.py". Los módulos sirven para gestionar el historial de la biblioteca y el menú principal. Además también se encargó de escribir el ""ReadMe.md".
+
+En ninguno de los casos se hizo uso de IA. 
+
+Se ultilizaron los siguientes **módulos de Python**:
+
+-os
+
+-datatime
+
+-json
+
+
+**URL Repositorio**:
+
+https://github.com/germansango01/biblioteca-gestor
+
+
+**BIBLIOTECA-GESTOR**
+
+'''
+
+├─ files
+│  ├─ books.json
+│  └─ history.json
+├─ book_manager.py
+
+├─ books.py
+
+├─ historial.py
+├─ main.py
+└─Readme.md
+
+└─tools.py
+
+'''
