@@ -1,4 +1,5 @@
 from pathlib import Path
+from historial import History
 import json
 
 # Book Class
@@ -9,11 +10,12 @@ class Book:
     # Ruta de libros.
     BOOKS_PATH = Path("files") / "books.json"
 
-    def __init__(self):
+    def __init__(self, history: History):
         """
         Inicializa el Book y carga los libros.
         """
         self._books = self._load_books()
+        self._history = history
 
 
     def _load_books(self):
@@ -150,7 +152,19 @@ class Book:
         if book.get("available") is False:
             return False
 
+        history_data = {
+            "id": book['id'],
+            "status": "taken",
+            "title": book['title'],
+            "author": book['author'],
+            "year": book['year'],
+            "created_at": self._history._get_current_time()
+        }
+
+        # Guardar historial y actualizar estatus
+        self._history.log_history(history_data)
         book["available"] = False
+
         return True
 
 
@@ -175,5 +189,17 @@ class Book:
         if book.get("available") is True:
             return False
 
+        history_data = {
+            "id": book['id'],
+            "status": "returned",
+            "title": book['title'],
+            "author": book['author'],
+            "year": book['year'],
+            "created_at": self._history._get_current_time()
+        }
+
+        # Guardar historial y actualizar estatus
+        self._history.log_history(history_data)
         book["available"] = True
+
         return True
