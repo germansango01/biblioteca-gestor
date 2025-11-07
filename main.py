@@ -5,13 +5,12 @@ from book_manager import BookManager
 from historial import History
 
 
-#Funcion del MAIN
+# Funcion del MAIN
 def main():
-
     try:
-        books = Book()
+        history = History()
+        books = Book(history)
         book_manager = BookManager(books)
-        new_historial = History()
     except Exception as e:
         print(f"\n❌ Error fatal al inicializar el sistema: {e}")
         print("Asegúrate de que las clases Book, BookManager y History existen.")
@@ -21,7 +20,7 @@ def main():
     while continuar:
         os.system("cls")
         show_menu()
-        opcion = opciones("Elije una opción (1-7): ")
+        opcion = opciones("Elije una opción (1 - 7): ")
         match opcion:
             case 1:
                 book_manager.show_books_list()
@@ -34,7 +33,7 @@ def main():
             case 5:
                 book_manager.find_book_from_library()
             case 6:
-                new_historial.show_history()
+                history.show_history()
             case 7:
                 despedida()
                 continuar = False
