@@ -102,7 +102,7 @@ class Book:
 
             # Buscar libro por Title.
             for book in self._books:
-                if book.get("title") == book_title:
+                if book.get("title").lower() == book_title.lower():
                     return book
             return None
 

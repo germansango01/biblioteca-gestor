@@ -1,6 +1,5 @@
 from books import Book
 
-
 class BookManager:
     """
     Clase para manejar toda la interacción con los libros.
@@ -17,45 +16,44 @@ class BookManager:
         """
         Muestra la lista de libros disponibles.
         """
-        # Usamos el book para obtener los datos
+        # Obtener libros.
         books = self._books.get_books()
 
         if not books:
-            print("-" * 70)
-            print("\nNo hay libros disponibles en este momento.\n")
-            print("-" * 70)
+            print("\n" + "=" * 75)
+            print(f"📚 {'Biblioteca':^{75 - 4}}")
+            print("=" * 75)
+            print(f"\n{'⚠️  No hay libros disponibles en este momento.':^{75}}\n")
+            print("-" * 75)
             return
 
         # Mostrar los libros disponibles.
-        print("\n" + "=" * 70)
-        print(f"{' ' * 10}Biblioteca")
-        print("=" * 70)
-        print(f"{'Id':<5} {'Titulo':<20} {'Autor':<20} {"Año":<10} {'Disponible':<4}")
-        print("-" * 70)
-
+        print("\n" + "=" * 75)
+        print(f"📚 {'Biblioteca':^{75 - 4}}")
+        print("=" * 75)
+        print(f"{'ID':<5} {'Título':<30} {'Autor':<20} {'Año':<6} {'Disponible':<12}")
+        print("-" * 75)
 
         for book in books:
+            availability = '📗' if book.get('available', False) else '📕'
+            print(f"{book['id']:<5} {book['title']:<30} {book['author']:<20} {book['year']:<6} {availability:^12}")
 
-
-                print(f"{book['id']:<5} {book['title']:<20} {book['author']:<20} {book['year']:<10} {'SI' if book['available'] else 'NO':<4}")
-
-
-
-        print("-" * 70)
-
+        print("-" * 75)
 
     def add_book_to_library(self):
         """
         Interfaz para añadir libros a la biblioteca.
         """
+        # Obtener libros.
         books = self._books.get_books()
-        # validar id actual
-        current_id = 0 if not books else len(books)
 
-        # --- Book name---
+        # validar book id actual
+        new_book_id = 0 if not books else len(books)
+
+        #  Book title
         while True:
             try:
-                title = input("Ingresa el titulo del libro a ingresar (o presiona Enter para cancelar): ").strip()
+                title = input("Ingresa el título del libro a ingresar (o presiona Enter para cancelar): ").strip()
                 if not title:
                     print("▶️ Acción cancelada por el usuario.")
                     return False
@@ -63,17 +61,17 @@ class BookManager:
                 book = self._books.find_book_title(title)
 
                 if book:
-                    print(f"❌ El libro con el titulo {title} ya existe. Intenta de nuevo.")
+                    print(f"❌ El libro con el título **{title}** ya existe en la biblioteca. Intenta con otro título.")
                     continue
                 break
             except (EOFError, KeyboardInterrupt):
                 print("\n ⚠️ Entrada interrumpida por el usuario.")
                 return False
 
-        # --- Book author ---
+        #  Book author
         while True:
             try:
-                author = input("Ingresa el author del libro a ingresar (o presiona Enter para cancelar): ").strip()
+                author = input("Ingresa el autor del libro a ingresar (o presiona Enter para cancelar): ").strip()
                 if not author:
                     print("▶️ Acción cancelada por el usuario.")
                     return False
@@ -82,44 +80,46 @@ class BookManager:
                 print("\n ⚠️ Entrada interrumpida por el usuario.")
                 return False
 
-        # --- Book year ---
+        #  Book year
         year = None
         while True:
             try:
-                input_year = input("Ingresa el año del libro a ingresar (o presiona Enter para cancelar): ").strip()
+                input_year = input("Ingresa el año de publicación del libro (o presiona Enter para cancelar): ").strip()
                 if not input_year:
                     print("▶️ Acción cancelada por el usuario.")
                     return False
 
                 year = int(input_year)
 
-                if year <= 1:
-                    print(f"❌ ingrese un año valido. Intenta de nuevo.")
+                # Validar año debe ser un número positivo
+                if year <= 0:
+                    print(f"❌ El año ingresado no es válido. Ingresa un número positivo (por ejemplo, 2024).")
                     continue
                 break
             except ValueError:
-                print("❌ Entrada no válida. Ingresa solo números para el ID del producto.")
+                print("❌ Entrada no válida. Ingresa solo números enteros para el año.")
             except (EOFError, KeyboardInterrupt):
                 print("\n ⚠️ Entrada interrumpida por el usuario.")
                 return False
 
         # Formato de nuevo libro.
         new_book = {
-            "id": current_id + 1,
+            "id": new_book_id + 1,
             "title": title,
             "author": author,
             "year": year,
             "available": True
         }
 
-        # --- Agregar a la biblioteca ---
+        # Agregar a la biblioteca.
         add_to_library = self._books.add_book(new_book)
 
+        # Validar ingreso del libro.
         if add_to_library:
-            print(f"\n✅ Libro {new_book['title']} agragado a la biblioteca.")
+            print(f"\n✅ Libro **{new_book['title']}** agregado correctamente a la biblioteca.")
             return True
         else:
-            print("\n❌ No se pudo agregar el libro a la biblioteca.")
+            print(f"\n❌ No se pudo agregar el libro '{new_book['title']}' a la biblioteca debido a un error interno.")
             return False
 
 
@@ -127,14 +127,15 @@ class BookManager:
         """
         Interfaz para prestar libro.
         """
-
+        # Mostrar biblioteca.
         self.show_books_list()
+        # Obtener libros.
         books = self._books.get_books()
 
         if not books:
             return False
 
-        # --- Seleccionar ID ---
+        #  Seleccionar Book Id
         book_id = None
         while True:
             try:
@@ -147,23 +148,24 @@ class BookManager:
                 book = self._books.find_book(book_id)
 
                 if not book:
-                    print(f"❌ El libro con Id {book_id} no está disponible. Intenta de nuevo.")
+                    print(f"❌ El libro con Id **{book_id}** no existe en la base de datos. Intenta de nuevo.")
                     continue
                 break
             except ValueError:
-                print("❌ Entrada no válida. Ingresa solo números para el ID del producto.")
+                print("❌ Entrada no válida. Ingresa solo números para el ID del libro.")
             except (EOFError, KeyboardInterrupt):
                 print("\n ⚠️ Entrada interrumpida por el usuario.")
                 return False
 
-        # --- Presat libro ---
+        #  Prestar libro
         lend_book = self._books.lend_book(book_id)
 
+        # Validar prestar libro.
         if lend_book:
-            print(f"✅ Libro {book["title"]} prestado correctamente.")
+            print(f"✅ Libro **{book['title']}** prestado correctamente.")
             return True
         else:
-            print("❌ No se pudo prestar el libro.")
+            print(f"❌ El libro **{book['title']}** no se pudo prestar. Es probable que ya esté prestado.")
             return False
 
 
@@ -171,14 +173,15 @@ class BookManager:
         """
         Interfaz para devolver libro.
         """
-
+        # Mostrar biblioteca.
         self.show_books_list()
+        # Obtener libros.
         books = self._books.get_books()
 
         if not books:
             return False
 
-        # --- Seleccionar ID ---
+        #  Seleccionar Book Id
         book_id = None
         while True:
             try:
@@ -191,22 +194,63 @@ class BookManager:
                 book = self._books.find_book(book_id)
 
                 if not book:
-                    print(f"❌ El libro con Id {book_id} no está disponible. Intenta de nuevo.")
+                    print(f"❌ El libro con Id **{book_id}** no existe en el registro. Intenta de nuevo.")
                     continue
                 break
             except ValueError:
-                print("❌ Entrada no válida. Ingresa solo números para el ID del producto.")
+                print("❌ Entrada no válida. Ingresa solo números para el ID del libro.")
             except (EOFError, KeyboardInterrupt):
                 print("\n ⚠️ Entrada interrumpida por el usuario.")
                 return False
 
-        # --- Retornar libro ---
-        lend_book = self._books.return_book(book_id)
+        #  Retornar libro
+        return_book = self._books.return_book(book_id)
 
-        if lend_book:
-            print(f"✅ Libro {book["title"]} devuelto correctamente.")
+        # validar retorno libro.
+        if return_book:
+            print(f"✅ Libro **{book['title']}** devuelto correctamente.")
             return True
         else:
-            print("❌ No se pudo devolver el libro.")
+            print(f"❌ No se pudo devolver el libro **{book['title']}**. Es probable que ya estuviera disponible (no prestado).")
             return False
 
+
+    def find_book_from_library(self):
+        """
+        interfaz buscar libro
+        """
+        # Obtener libros.
+        books = self._books.get_books()
+
+        if not books:
+            print(f"\n⚠️  No hay libros disponibles en este momento.")
+            return False
+
+        # Bucle para solicitar el libro.
+        while True:
+            try:
+                # Book title
+                title = input("Ingresa el título del libro a buscar (o presiona Enter para cancelar): ").strip()
+
+                if not title:
+                    print("▶️ Acción cancelada por el usuario.")
+                    return False
+
+                # Buscar el libro
+                book = self._books.find_book_title(title)
+
+                if book:
+                    # Libro encontrado.
+                    availability = '📗' if book.get('available', False) else '📕'
+                    print("-" * 75)
+                    print(f"{'ID':<5} {'Título':<30} {'Autor':<20} {'Año':<6} {'Disponible':<12}")
+                    print(f"{book.get('id', 'N/A'):<5} {book.get('title', 'N/A'):<30} {book.get('author', 'N/A'):<20} {book.get('year', 'N/A'):<6} {availability:^12}")
+                    print("-" * 75)
+
+                    return True
+                else:
+                    # Libro no encontrado.
+                    print(f"❌ El libro con el título **{title}** no existe en la biblioteca. Intenta con otro título.")
+            except (EOFError, KeyboardInterrupt):
+                print("\n ⚠️ Entrada interrumpida por el usuario.")
+                return False

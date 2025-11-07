@@ -21,7 +21,7 @@ def main():
     while continuar:
         os.system("cls")
         show_menu()
-        opcion = opciones("Elije una opcion(1-7): ")
+        opcion = opciones("Elije una opción (1-7): ")
         match opcion:
             case 1:
                 book_manager.show_books_list()
@@ -32,7 +32,7 @@ def main():
             case 4:
                 book_manager.restore_book_to_library()
             case 5:
-                pass
+                book_manager.find_book_from_library()
             case 6:
                 pass
             case 7:
