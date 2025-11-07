@@ -2,69 +2,102 @@ from pathlib import Path
 import json
 import datetime
 
-HISTORY_PATH = Path("biblioteca-gestor") / "history.json"
-history = None
+class History:
 
-class Date:
-    def get_current_time():
+    HISTORY_PATH = Path("files") / "history.json"
+    history = None
+
+    def __init__(self):
         """
-        Obtener la fecha y hora actual.
+        Inicializa el historial de li.
+        """
+        # El historial se almacena como un atributo de instancia
+        self._history = self._load_history()
+
+
+    def _load_history(self):
+        """
+            Cargar el historial desde HISTORY_PATH, en caso de que no exista se crea uno inicial.
+
+            Return:
+            list: Lista de diccionarios de libros.
+        """
+        # Validar ruta.
+        self.HISTORY_PATH.parent.mkdir(exist_ok=True)
+
+        # Crear archivo si no existe.
+        if not self.HISTORY_PATH.exists():
+            return []
+
+        # Cargar historial desde JSON.
+        try:
+            with self.HISTORY_PATH.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+                # Asegurar que data es una lista
+                return data if isinstance(data, list) else []
+        except (json.JSONDecodeError, OSError):
+            print(f"\n❌ Error: El archivo '{self.HISTORY_PATH}' contiene JSON mal formado y no se pudo cargar.")
+            return []
+
+
+    def _get_current_time(self):
+        """
+        Obtener la fecha y hora actual en formato ISO.
 
         Return:
             str: Cadena de texto con la fecha y hora actual.
         """
-        # fecha actual.
         return datetime.datetime.now().isoformat()
-date = Date()
 
-class Loader:
-    def load_history(book):
+
+    def _save_history(self):
         """
-        Cargar el historial desde HISTORY_PATH, en caso de que no exista se crea uno inicial.
-        
-        Return:
-            list: Lista de diccionarios de libros.
+        Guarda la lista completa del historial en formato JSON.
         """
-    #VALIDACIÓN DE LA RUTA DEL HISTORIAL
-        HISTORY_PATH.parent.mkdir(exist_ok=True) 
-    
-    #CREAR ARCHIVO SI NO EXISTE
-        if not HISTORY_PATH.exists():
-            return []
-        
-        #Cargar historial desde JSON.
+        # Validar ruta.
+        self.HISTORY_PATH.parent.mkdir(exist_ok=True)
+
+        # Guardar el historial en el JSON.
         try:
-            with HISTORY_PATH.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-                return data if isinstance(data, list) else []
-        except (json.JSONDecodeError, OSError):
-            print(f"\n❌ Error: El archivo '{HISTORY_PATH}' contiene JSON mal formado y no se pudo cargar.")
-            return []
-loader = Loader()
-    
-class Getter:
-    def get_history():
+            with self.HISTORY_PATH.open("w", encoding="utf-8") as f:
+                # Usa el atributo interno self._history
+                json.dump(self._history, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"❌ Error al guardar compras en '{self.HISTORY_PATH}': {type(e).__name__} - {e}")
+
+
+    def log_history(self, book_data):
         """
-        Obtener historial.
+        Registrar un nuevo libro al historial de prestamos y devoluciones.
+
+        Args:
+            book_data (dict): Un diccionario con los datos del libro.
 
         Return:
-            list: lista de diccionarios con el historial.
+            bool: True si el registro fue exitoso, False si falló.
         """
-        global history
+        try:
+            # Agregar el timestamp.
+            if "timestamp" not in book_data:
+                book_data["created_at"] = self._get_current_time()
 
-        # Validar productos.
-        if history is None:
-            history = loader
-        return history    
-getter = Getter() 
-      
-class Show:
-    def show_history() -> None:
+            # Añadir el libro al historial.
+            self._history.append(book_data)
+
+            # Guardar el historial actualizado
+            self._save_history()
+            return True
+        except Exception as e:
+            print(f"❌ Error al registrar la compra en el historial: {e}")
+            return False
+
+
+    def show_history(self) -> None:
         """
         Función para enseñar el historial de la biblioteca.
         """
-    # Obtener historial de libros.
-        libros = getter
+        # Obtener historial de libros.
+        libros = self._history.copy()
 
         # Validar si no hay libros.
         if not libros:
@@ -82,176 +115,3 @@ class Show:
         for libro in libros:
                 print(f"{libro['id']:<3} {libro['status']:<10} {libro['title']:<15} {libro['author']:<10} {libro['year']:<10} {libro['created_at']:<10}")
         print("-" * 50)
-show = Show()
-
-class Saver:
-    def save_libros(books):
-        """
-        Guarda la lista completa del historial de prestamos y devoluciones
-        
-        """
-        #VALIDACIÓN RUTA
-        HISTORY_PATH.parent.mkdir(exist_ok=True)
-
-        #Guardar movimientos en el JSON.
-        try:
-            with HISTORY_PATH.open("w", encoding="utf-8") as f:
-                # Uso la variable 'books' que es más estándar.
-                json.dump(books, f, indent=4, ensure_ascii=False)
-        except Exception as e:
-            print(f"❌ Error al guardar compras en '{HISTORY_PATH}': {type(e).__name__} - {e}")
-save = Saver()
-
-class Log:
-    def log_history(book_data):
-            """
-            Registrar una nueva entrada en el historial cuando se saca o devuelve un libro.
-            
-            """
-            try:
-                # Cargar historial existente.
-                history = loader
-                # Añadir la nueva compra.
-                history.append(book_data)
-                # Guardar el historial actualizado.
-                save(history)
-                return True
-            except Exception as e:
-                print(f"❌ Error al registrar el libro en el historial: {e}")
-                return False
-log = Log()
-
-
-
-
-
-
-
-
-# """
-# historial.py
-# ---------
-# Funciones para manejar el historial.
-# """
-# #IMPORTACIONES
-# from pathlib import Path
-# import json
-# import datetime
-
-# # Ruta de historial.
-# HISTORY_PATH = Path("biblioteca-gestor") / "history.json"
-
-# # Variable global productos.
-# history = None
-
-# #CREAR LOAD_HISTORY() - ✔
-# #CREAR GET_HISTORY() - ✔
-# #CREAR SHOW_HISTORY() - ✔
-
-# def get_current_time():
-#     """
-#     Obtener la fecha y hora actual.
-
-#     Return:
-#         str: Cadena de texto con la fecha y hora actual.
-#     """
-#     # fecha actual.
-#     return datetime.datetime.now().isoformat()
-
-# def load_history():
-#     """
-#     Cargar el historial desde HISTORY_PATH, en caso de que no exista se crea uno inicial.
-    
-#     Return:
-#         list: Lista de diccionarios de libros.
-#     """
-#     #VALIDACIÓN DE LA RUTA DEL HISTORIAL
-#     HISTORY_PATH.parent.mkdir(exist_ok=True) 
-    
-#     #CREAR ARCHIVO SI NO EXISTE
-#     if not HISTORY_PATH.exists():
-#         return []
-    
-#     #Cargar historial desde JSON.
-#     try:
-#         with HISTORY_PATH.open("r", encoding="utf-8") as f:
-#             data = json.load(f)
-#             return data if isinstance(data, list) else []
-#     except (json.JSONDecodeError, OSError):
-#         print(f"\n❌ Error: El archivo '{HISTORY_PATH}' contiene JSON mal formado y no se pudo cargar.")
-#         return []
-
-# def get_history():
-#     """
-#     Obtener historial.
-
-#     Return:
-#         list: lista de diccionarios con el historial.
-#     """
-#     global history
-
-#     # Validar productos.
-#     if history is None:
-#         history = load_history()
-#     return history    
-    
-    
-# def show_history() -> None:
-#     """
-#     Función para enseñar el historial de la biblioteca.
-#     """
-#     # Obtener historial de libros.
-#     libros = get_history()
-
-#     # Validar si no hay libros.
-#     if not libros:
-#         print("-" * 50)
-#         print("\nEl historial está vacío.\n")
-#         print("-" * 50)
-#         return
-
-#     # Mostrar historial.
-#     print("\n" + "=" * 50)
-#     print(f"{' ' * 10}Libros Disponibles")
-#     print("=" * 50)
-#     print(f"{'Id':<3} {'Estado':<10} {'Titulo':<15} {'Autor':<10} {'Año':<10} {'Fecha':<10}")
-#     print("-" * 50)
-#     for libro in libros:
-#             print(f"{libro['id']:<3} {libro['status']:<10} {libro['title']:<15} {libro['author']:<10} {libro['year']:<10} {libro['created_at']:<10}")
-#     print("-" * 50)
-
-# ######################
-# def log_history(book_data):
-#     """
-#     Registrar una nueva entrada en el historial cuando se saca o devuelve un libro.
-    
-#     """
-#     try:
-#         # Cargar historial existente.
-#         history = load_history()
-
-#         # Añadir la nueva compra.
-#         history.append(book_data)
-
-#         # Guardar el historial actualizado.
-#         save_libros(history)
-#         return True
-#     except Exception as e:
-#         print(f"❌ Error al registrar el libro en el historial: {e}")
-#         return False
-
-# def save_libros(books):
-#     """
-#     Guarda la lista completa del historial de prestamos y devoluciones
-    
-#     """
-#     #VALIDACIÓN RUTA
-#     HISTORY_PATH.parent.mkdir(exist_ok=True)
-
-#     #Guardar movimientos en el JSON.
-#     try:
-#         with HISTORY_PATH.open("w", encoding="utf-8") as f:
-#             # Uso la variable 'books' que es más estándar.
-#             json.dump(books, f, indent=4, ensure_ascii=False)
-#     except Exception as e:
-#         print(f"❌ Error al guardar compras en '{HISTORY_PATH}': {type(e).__name__} - {e}")

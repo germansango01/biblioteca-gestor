@@ -1,20 +1,8 @@
 import os
 from tools import show_menu, opciones, despedida
-import historial
+from historial import History
 
-
-book1 = {
-        "id": 1,
-        "title": "German",
-        "author": "Contreras",
-        "year": 1987,
-        "status": "Lend",
-       "created_at": "2025-11-06"
-    }
-
-
-cargar = historial.Loader(book1)
-
+new_historial = History()
 
 #Funcion del MAIN
 def main():
@@ -22,7 +10,7 @@ def main():
     while continuar:
         os.system("cls")
         show_menu()
-        opcion = opciones("Elije una opcion(1-7):")         
+        opcion = opciones("Elije una opción (1-7): ")
         match opcion:
             case 1:
                 pass
@@ -35,16 +23,15 @@ def main():
             case 5:
                 pass
             case 6:
-                historial.show
+                new_historial.show_history()
             case 7:
-                 despedida()
-                 continuar = False  
+                despedida()
+                continuar = False
             case _:
                 print("Esa opción no está disponible")
                 print("")
         input('Pulse cualquier tecla para continuar...')
-     
+
+
 if __name__ == "__main__":
         main()
-    
-    
