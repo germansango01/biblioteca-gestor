@@ -1,10 +1,10 @@
-#HERRAMIENTAS DEL MAIN
+# HERRAMIENTAS DEL MAIN
 """
 tools.py
 ---------
 Funciones utilitarias para interacción con el usuario y presentación de información.
 """
-#MENÚ DEL PROGRAMA
+# MENÚ DEL PROGRAMA
 def show_menu():
     """
     Muestra el menú principal con las opciones disponibles.
@@ -21,7 +21,7 @@ def show_menu():
         7️⃣  Salir del programa
         """)
 
-#OPCIONES del menú
+# OPCIONES del menú
 def opciones(mensaje):
         """
     -Solicita al usuario una opción numérica y valida que esté dentro de un rango.
@@ -34,5 +34,8 @@ def opciones(mensaje):
         except ValueError:
             return print("¡Error ❌! Solo números")
 
+          
+# Mensjae de despedida
 def despedida():
     print(f"Gracias por usar nuestro gestor 📖")
+    print(f"Saludos de Germán y Nzinga Mbande📖")
