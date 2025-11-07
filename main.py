@@ -14,7 +14,7 @@ def main():
         new_historial = History()
     except Exception as e:
         print(f"\n❌ Error fatal al inicializar el sistema: {e}")
-        print("Asegúrate de que las clases Product, Purchase, Cart y utils existen.")
+        print("Asegúrate de que las clases Book, BookManager y History existen.")
         return
 
     continuar = True
