@@ -4,7 +4,6 @@ from books import Book
 from book_manager import BookManager
 from historial import History
 
-
 # Funcion del MAIN
 def main():
     try:

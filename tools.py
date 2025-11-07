@@ -34,7 +34,7 @@ def opciones(mensaje):
         except ValueError:
             return print("¡Error ❌! Solo números")
 
-          
+
 # Mensjae de despedida
 def despedida():
     print(f"Gracias por usar nuestro gestor 📖")
